@@ -6,7 +6,7 @@ import { ReactNode } from "react";
 
 export function Providers({ children }: { children: ReactNode }) {
   return (
-    // @ts-expect-error - next-auth v4 SessionProvider has type incompatibility with React 19
+    // @ts-ignore - next-auth v4 SessionProvider may have type incompatibility with React 19
     <SessionProvider>
       {children}
       <Toaster position="top-right" />
