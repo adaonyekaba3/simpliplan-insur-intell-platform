@@ -26,7 +26,14 @@ export default function ComparePage() {
   const erCopays = healthPlans.map(p => p.copays.er);
   const genericRx = healthPlans.map(p => p.rxTiers.generic);
 
-  const ValueCell = ({ value, values, lowerIsBetter = true, format = (v: number) => `$${v}` }: any) => {
+  interface ValueCellProps {
+    value: number;
+    values: number[];
+    lowerIsBetter?: boolean;
+    format?: (v: number) => string;
+  }
+
+  const ValueCell = ({ value, values, lowerIsBetter = true, format = (v: number) => `$${v}` }: ValueCellProps) => {
     const { best, worst } = getBestWorst(values, lowerIsBetter);
     const isBest = value === best;
     const isWorst = value === worst;
