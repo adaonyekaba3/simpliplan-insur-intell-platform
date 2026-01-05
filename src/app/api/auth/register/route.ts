@@ -6,6 +6,11 @@ export async function POST(req: Request) {
   try {
     const { name, email, password } = await req.json();
 
+    // Validate input
+    if (!name || !email || !password) {
+      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+    }
+
     // Check if user exists
     const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) {
@@ -22,6 +27,13 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ user: { id: user.id, name: user.name, email: user.email } });
   } catch (error) {
-    return NextResponse.json({ error: "Registration failed" }, { status: 500 });
+    console.error("Registration error:", error);
+
+    // Return more specific error for debugging
+    const errorMessage = error instanceof Error ? error.message : "Registration failed";
+    return NextResponse.json({
+      error: "Registration failed",
+      details: process.env.NODE_ENV === "development" ? errorMessage : undefined
+    }, { status: 500 });
   }
 }
